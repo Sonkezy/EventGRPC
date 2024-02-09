@@ -137,13 +137,10 @@ func getSenderEventsByTime(time, senderid int64) []*pb.EventInfo {
 }
 
 func getSenderEvents(eventid, senderid int64) *pb.EventInfo {
-	var events *pb.EventInfo
 	for _, eventInfo := range eventsList {
-		if eventInfo.Eventid == eventid {
-			if eventInfo.Senderid == senderid {
-				events = eventInfo
-			}
+		if eventInfo.Eventid == eventid && eventInfo.Senderid == senderid {
+			return eventInfo
 		}
 	}
-	return events
+	return nil
 }

@@ -2,16 +2,22 @@ package main
 
 import (
 	"context"
+	pb "event_api/pkg/proto"
 	"flag"
 	"fmt"
 	"io"
-
-	pb "event_api/pkg/proto"
+	"os"
+	"os/exec"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
+func resetTerminal() {
+	cmd := exec.Command("reset")
+	cmd.Stdout = os.Stdout
+	cmd.Run()
+}
 func main() {
 	var destinationIP string
 	var destinationPort string
@@ -27,15 +33,15 @@ func main() {
 	}
 	defer conn.Close()
 	client := pb.NewEventClient(conn)
-	/*
-		p := prompt.New(
-			Executor,
-			completer,
-			prompt.OptionTitle("Event shell client"),
-			prompt.OptionPrefix(">>>"),
-			prompt.OptionInputTextColor(prompt.Yellow),
-		)
-		p.Run()
+
+	/*p := prompt.New(
+		Executor,
+		completer,
+		prompt.OptionTitle("Event shell client"),
+		prompt.OptionPrefix(">>>"),
+		prompt.OptionInputTextColor(prompt.Yellow),
+	)
+	p.Run()
 	*/
 	for {
 		var command string
@@ -129,12 +135,14 @@ func GetEventsStream(client pb.EventClient, senderid int64) {
 	}
 }
 
-/*func Executor(s string) {
+/*
+func Executor(s string) {
 	s = strings.TrimSpace(s)
 	setCommand := strings.Split(s, " ")
 	switch setCommand[0] {
 	case "exit", "quit", "q":
 		fmt.Println("Close")
+		resetTerminal()
 		os.Exit(0)
 		return
 	}
@@ -149,4 +157,5 @@ func completer(d prompt.Document) []prompt.Suggest {
 		}
 	}
 	return prompt.FilterHasPrefix(s, d.GetWordBeforeCursor(), true)
-}*/
+}
+*/
