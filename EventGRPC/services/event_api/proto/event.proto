@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package event_api;
+
+option go_package = "event/";
+
+message EventInfo{
+    int64 senderid = 1;
+    int64 eventid = 2;
+    int64 time = 3;
+    string name = 4;
+}
+
+message MakeEventRequest{
+    int64 senderid = 1;
+    int64 time = 2;
+    string name = 3;
+}
+message MakeEventResponse{
+    int64 eventid = 1;
+}
+
+message GetEventRequest{
+    int64 senderid = 1;
+    int64 eventid = 2;
+}
+
+message GetEventResponse{
+    EventInfo eventInfo = 1;
+}
+
+message DeleteEventRequest{
+    int64 senderid = 1;
+    int64 eventid = 2;
+}
+
+message DeleteEventResponse{
+    int64 senderid = 1;
+}
+
+message GetEventsRequest{
+    int64 senderid = 1;
+    int64 time = 2;
+}
+
+message GetEventsResponse{
+    repeated EventInfo eventInfo = 1;
+}
+
+message GetEventsStreamRequest{
+    int64 senderid = 1;
+    int64 time = 2;
+}
+
+message GetEventsStreamResponse{
+    EventInfo EventInfo = 1;
+}
+
+
+message TestRequest {}
+message TestResponse {
+    string answer = 1;
+}
+
+service Event{
+    rpc Test (TestRequest) returns (TestResponse);
+    rpc MakeEvent (MakeEventRequest) returns (MakeEventResponse);
+    rpc GetEvent (GetEventRequest) returns (GetEventResponse);
+    rpc GetEvents (GetEventsRequest) returns (GetEventsResponse);
+    rpc GetEventsStream (GetEventsStreamRequest) returns (stream GetEventsStreamResponse); 
+    rpc DeleteEvent (DeleteEventRequest) returns (DeleteEventResponse);
+}
